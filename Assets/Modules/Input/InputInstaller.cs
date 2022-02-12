@@ -1,5 +1,4 @@
 using Modules.Inputs;
-using UnityEngine;
 using Zenject;
 
 public class InputInstaller : MonoInstaller

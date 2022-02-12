@@ -1,7 +1,9 @@
-﻿namespace Modules.Inputs
+﻿using UniRx;
+
+namespace Modules.Inputs
 {
     public interface IInputManager
     {
-        public delegate void Shoot(int targetNumber);
+        public IReactiveCommand<int> Shoot { get; }
     }
 }

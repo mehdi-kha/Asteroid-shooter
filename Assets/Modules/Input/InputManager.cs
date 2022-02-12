@@ -1,11 +1,5 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.InputSystem;
 using Zenject;
+using UniRx;
 
 namespace Modules.Inputs
 {
@@ -16,7 +10,7 @@ namespace Modules.Inputs
 
         public void OnShoot(int key)
         {
-            Debug.Log("Shoot " + key);
+            this.Shoot.Execute(key);
         }
         
         [Inject]
@@ -32,7 +26,11 @@ namespace Modules.Inputs
             this.playerInputActions.Player.Shoot7.performed += _=>OnShoot(7);
             this.playerInputActions.Player.Shoot8.performed += _=>OnShoot(8);
             this.playerInputActions.Player.Shoot9.performed += _=>OnShoot(9);
+
+            this.Shoot = new ReactiveCommand<int>();
         }
+
+        public IReactiveCommand<int> Shoot { get; private set; }
     }
 }
 
