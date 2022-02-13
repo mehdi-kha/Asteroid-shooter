@@ -47,34 +47,54 @@ public class EnemiesManager : MonoBehaviour
         this.inputManager.Shoot.Subscribe(OnShoot);
         this.enemiesModel.VisibleEnemies.ObserveAdd().Subscribe(e => this.OnVisibleEnemyAdded(e.Value));
         this.enemiesModel.VisibleEnemies.ObserveRemove().Subscribe(e => this.OnVisibleEnemyRemoved(e.Value));
-        this.gameModel.GameStatus.Subscribe(OnGameStatusChanged);
+        this.gameModel.GameStatus.Pairwise().Subscribe(OnGameStatusChanged);
 
         this.topLeftPosition = this.uiModel.TopLeftWorldPosition;
         this.topRightPosition = this.uiModel.TopRightWorldPosition;
         this.bottomLeftPosition = this.uiModel.BottomLeftWorldPosition;
         
+        this.InitializeEnemies();
+    }
+
+    private void InitializeEnemies()
+    {
         // Fill in the pool
-        if (this.enemiesModel.AvailableEnemies == null)
+        if (this.enemiesModel.AvailableEnemies != null)
         {
-            this.enemiesModel.AvailableEnemies = new ObjectPoolWithQueue<IEnemy>(CreatePooledItem, OnTakeFromPool, OnReturnedToPool, OnDestroyPoolObject, collectionChecks, defaultPoolSize);
+            this.enemiesModel.AvailableEnemies.Clear();
+            this.enemiesModel.AvailableEnemies = null;
         }
+        this.enemiesModel.AvailableEnemies = new ObjectPoolWithQueue<IEnemy>(CreatePooledItem, OnTakeFromPool, OnReturnedToPool, OnDestroyPoolObject, collectionChecks, defaultPoolSize);
 
         // Start spawning
+        if (this.enemiesModel.VisibleEnemies.Count != 0)
+        {
+            foreach (var visibleEnemy in this.enemiesModel.VisibleEnemies)
+            {
+                visibleEnemy.Destroy();
+            }
+            this.enemiesModel.VisibleEnemies.Clear();
+        }
         tokenSource = new System.Threading.CancellationTokenSource();
         tokenSource.Token.ThrowIfCancellationRequested();
         this.SpawnEnemiesPeriodically(initialInterval, this.rate, tokenSource);
     }
 
-    private void OnGameStatusChanged(GameStatus status)
+    private void OnGameStatusChanged(Pair<GameStatus> status)
     {
         this.tokenSource?.Cancel();
-        if (status == GameStatus.GameOver)
+        if (status.Current == GameStatus.GameOver)
         {
             foreach (var enemy in this.enemiesModel.VisibleEnemies)
             {
                 // Stop all enemies still falling
                 enemy.Speed = 0;
             }
+        }
+
+        if (status.Previous == GameStatus.GameOver && status.Current == GameStatus.Playing)
+        {
+            this.InitializeEnemies();
         }
     }
 

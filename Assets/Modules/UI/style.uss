@@ -1,0 +1,73 @@
+.button-style {
+    height: 46px;
+    width: 131px;
+    align-items: stretch;
+    -unity-text-outline-color: rgb(0, 0, 0);
+    border-left-width: -147px;
+    border-right-width: -147px;
+    border-top-width: -147px;
+    border-bottom-width: -147px;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-left-color: rgb(255, 255, 255);
+    border-right-color: rgb(255, 255, 255);
+    border-top-color: rgb(255, 255, 255);
+    border-bottom-color: rgb(255, 255, 255);
+    background-color: rgb(255, 255, 255);
+    justify-content: flex-start;
+    position: absolute;
+    top: 78px;
+    left: auto;
+}
+
+.button-style:hover {
+    height: 46px;
+    width: 131px;
+    align-items: stretch;
+    -unity-text-outline-color: rgb(0, 0, 0);
+    border-left-width: -147px;
+    border-right-width: -147px;
+    border-top-width: -147px;
+    border-bottom-width: -147px;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-left-color: rgb(255, 255, 255);
+    border-right-color: rgb(255, 255, 255);
+    border-top-color: rgb(255, 255, 255);
+    border-bottom-color: rgb(255, 255, 255);
+    background-color: rgb(1, 89, 88);
+    justify-content: flex-start;
+    position: absolute;
+    top: 78px;
+    left: auto;
+    color: rgba(255, 255, 255, 255);
+}
+
+.button-style:active {
+    height: 46px;
+    width: 131px;
+    align-items: stretch;
+    -unity-text-outline-color: rgb(0, 0, 0);
+    border-left-width: -147px;
+    border-right-width: -147px;
+    border-top-width: -147px;
+    border-bottom-width: -147px;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-left-color: rgb(255, 255, 255);
+    border-right-color: rgb(255, 255, 255);
+    border-top-color: rgb(255, 255, 255);
+    border-bottom-color: rgb(255, 255, 255);
+    background-color: rgb(2, 53, 53);
+    justify-content: flex-start;
+    position: absolute;
+    top: 78px;
+    left: auto;
+    color: rgba(255, 255, 255, 255);
+}
