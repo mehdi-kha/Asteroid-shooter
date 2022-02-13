@@ -1,8 +1,13 @@
-﻿using Modules.Enemies.NumbersSprites;
+﻿using System;
+using Modules.Enemies.NumbersSprites;
+using Modules.UI;
 using UnityEngine;
 
 namespace Modules.Enemies
 {
+    /// <summary>
+    ///     An enemy has a number assigned to it, and moved down the screen at a certain speed.
+    /// </summary>
     public class Enemy : MonoBehaviour, IEnemy
     {
         [SerializeField] private SpriteRenderer background;
@@ -12,6 +17,8 @@ namespace Modules.Enemies
         [SerializeField] private NumbersSpritesScriptableObject numbersSprites;
 
         private int number;
+
+        private System.Random random = new System.Random();
 
         public Sprite Sprite
         {
@@ -29,12 +36,16 @@ namespace Modules.Enemies
             }
         }
 
-        private float speed = 2;
+        public float Speed { get; set; }
 
-        // Update is called once per frame
         void Update()
         {
-            transform.Translate(Vector3.down * speed * Time.deltaTime);
+            transform.Translate(Vector3.down * Speed * Time.deltaTime);
+        }
+        
+        public void SetPosition(Vector2 wordPosition)
+        {
+            this.transform.position = wordPosition;
         }
     }
 }
