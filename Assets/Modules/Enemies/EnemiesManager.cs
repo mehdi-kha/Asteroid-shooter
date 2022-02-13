@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Modules.Enemies;
 using Modules.Game;
+using Modules.Helper;
 using Modules.Inputs;
 using Modules.UI;
 using UnityEngine;
@@ -55,7 +56,7 @@ public class EnemiesManager : MonoBehaviour
         // Fill in the pool
         if (this.enemiesModel.AvailableEnemies == null)
         {
-            this.enemiesModel.AvailableEnemies = new UnityEngine.Pool.ObjectPool<IEnemy>(CreatePooledItem, OnTakeFromPool, OnReturnedToPool, OnDestroyPoolObject, collectionChecks, defaultPoolSize);
+            this.enemiesModel.AvailableEnemies = new ObjectPoolWithQueue<IEnemy>(CreatePooledItem, OnTakeFromPool, OnReturnedToPool, OnDestroyPoolObject, collectionChecks, defaultPoolSize);
         }
 
         // Start spawning
