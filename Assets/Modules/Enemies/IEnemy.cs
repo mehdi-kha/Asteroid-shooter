@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Windows.Input;
+using UniRx;
+using UnityEngine;
 
 namespace Modules.Enemies
 {
@@ -8,6 +10,13 @@ namespace Modules.Enemies
         int Number { get; set; }
         
         float Speed { get; set; }
+        
+        /// <summary>
+        ///     The vertical world coordinate below which the enemy has won.
+        /// </summary>
+        float BottomWorldPosition { get; set; }
+
+        public IReactiveCommand<IEnemy> BottomReached { get; }
 
         /// <summary>
         ///     Set the enemy's position.

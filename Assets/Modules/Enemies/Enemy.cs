@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Windows.Input;
 using Modules.Enemies.NumbersSprites;
 using Modules.UI;
+using UniRx;
 using UnityEngine;
 
 namespace Modules.Enemies
@@ -37,12 +39,21 @@ namespace Modules.Enemies
         }
 
         public float Speed { get; set; }
+        
+        public float BottomWorldPosition { get; set; }
 
         void Update()
         {
             transform.Translate(Vector3.down * Speed * Time.deltaTime);
+
+            if (this.transform.position.y < this.BottomWorldPosition)
+            {
+                this.BottomReached.Execute(this);
+            }
         }
-        
+
+        public IReactiveCommand<IEnemy> BottomReached { get; private set; }
+
         public void SetPosition(Vector2 wordPosition)
         {
             this.transform.position = wordPosition;
@@ -51,6 +62,11 @@ namespace Modules.Enemies
         public void Destroy()
         {
             Destroy(this.gameObject);
+        }
+        
+        public void Awake()
+        {
+            this.BottomReached = new ReactiveCommand<IEnemy>();
         }
     }
 }

@@ -358,6 +358,7 @@ GameObject:
   - component: {fileID: 1692544813}
   - component: {fileID: 1692544814}
   - component: {fileID: 1692544815}
+  - component: {fileID: 1692544816}
   m_Layer: 0
   m_Name: SceneContext
   m_TagString: Untagged
@@ -382,6 +383,7 @@ MonoBehaviour:
   - {fileID: 1692544813}
   - {fileID: 1692544814}
   - {fileID: 1692544815}
+  - {fileID: 1692544816}
   _installerPrefabs: []
   _autoRun: 1
   OnPreInstall:
@@ -451,6 +453,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uiModel: {fileID: 2089336514}
+--- !u!114 &1692544816
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1692544810}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c6b210c2c00c08488cbd9acba6b7d2f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2089336513
 GameObject:
   m_ObjectHideFlags: 0
@@ -461,6 +475,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2089336515}
   - component: {fileID: 2089336514}
+  - component: {fileID: 2089336516}
   m_Layer: 0
   m_Name: UI
   m_TagString: Untagged
@@ -496,3 +511,15 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2089336516
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2089336513}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d773077dd5944a98d949663d2c44648, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

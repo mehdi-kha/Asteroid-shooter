@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Modules.Enemies;
+using Modules.Game;
 using Modules.Inputs;
 using Modules.UI;
 using UnityEngine;
@@ -15,6 +16,7 @@ public class EnemiesManager : MonoBehaviour
     [Inject] private IInputManager inputManager;
     [Inject] private IEnemiesModel enemiesModel;
     [Inject] private IUIModel uiModel;
+    [Inject] private IGameModel gameModel;
     
     [SerializeField] private Sprite[] enemiesBackgrounds;
 
@@ -35,6 +37,7 @@ public class EnemiesManager : MonoBehaviour
 
     private Vector2 topLeftPosition;
     private Vector2 topRightPosition;
+    private Vector2 bottomLeftPosition;
 
     private CancellationTokenSource tokenSource;
 
@@ -44,8 +47,9 @@ public class EnemiesManager : MonoBehaviour
         this.enemiesModel.VisibleEnemies.ObserveAdd().Subscribe(e => this.OnVisibleEnemyAdded(e.Value));
         this.enemiesModel.VisibleEnemies.ObserveRemove().Subscribe(e => this.OnVisibleEnemyRemoved(e.Value));
 
-        this.topLeftPosition = this.uiModel.TopLeftWorldPosition();
-        this.topRightPosition = this.uiModel.TopRightWorldPosition();
+        this.topLeftPosition = this.uiModel.TopLeftWorldPosition;
+        this.topRightPosition = this.uiModel.TopRightWorldPosition;
+        this.bottomLeftPosition = this.uiModel.BottomLeftWorldPosition;
         
         // Fill in the pool
         if (this.enemiesModel.AvailableEnemies == null)
@@ -79,6 +83,7 @@ public class EnemiesManager : MonoBehaviour
         enemy.Sprite = enemySprite;
         enemy.Number = enemyValue;
         enemy.Speed = 0;
+        enemy.BottomWorldPosition = this.bottomLeftPosition.y;
         this.PositionEnemyRandomlyAboveScreen(enemy);
         return enemy;
     }
@@ -122,6 +127,13 @@ public class EnemiesManager : MonoBehaviour
     private void OnVisibleEnemyAdded(IEnemy enemy)
     {
         enemy.Speed = this.enemySpeed;
+        // Connect the enemy's victory with the overall game status
+        enemy.BottomReached.Subscribe(OnEnemyReachBottom);
+    }
+
+    private void OnEnemyReachBottom(IEnemy enemy)
+    {
+        this.gameModel.GameStatus.Value = GameStatus.GameOver;
     }
 
     private void OnVisibleEnemyRemoved(IEnemy enemy)
@@ -133,7 +145,8 @@ public class EnemiesManager : MonoBehaviour
     
     IEnemy CreatePooledItem()
     { 
-        return this.InstantiateRandomEnemy();
+        var enemy = this.InstantiateRandomEnemy();
+        return enemy;
     }
 
     // Called when an item is returned to the pool using Release
