@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 using Modules.Enemies;
 using Modules.Inputs;
@@ -20,7 +21,7 @@ public class EnemiesManager : MonoBehaviour
 
     [SerializeField] private float rate = 0.99f;
 
-    [SerializeField] private int initialInterval = 1500;
+    [SerializeField] private int initialInterval = 1000;
 
     [SerializeField] private float enemySpeed = 2;
     
@@ -33,6 +34,7 @@ public class EnemiesManager : MonoBehaviour
     {
         this.inputManager.Shoot.Subscribe(OnShoot);
         this.enemiesModel.VisibleEnemies.ObserveAdd().Subscribe(e => this.OnVisibleEnemyAdded(e.Value));
+        this.enemiesModel.VisibleEnemies.ObserveRemove().Subscribe(e => this.OnVisibleEnemyRemoved(e.Value));
 
         this.topLeftPosition = this.uiModel.TopLeftWorldPosition();
         this.topRightPosition = this.uiModel.TopRightWorldPosition();
@@ -50,7 +52,13 @@ public class EnemiesManager : MonoBehaviour
 
     private void OnShoot(int number)
     {
-        Debug.Log(number);
+        // Find the first enemy in the queue matching the number
+        var matchedEnemy = this.enemiesModel.VisibleEnemies.FirstOrDefault(enemy => enemy.Number == number);
+        if (matchedEnemy != null)
+        {
+            this.enemiesModel.AvailableEnemies.Add(matchedEnemy);
+            this.enemiesModel.VisibleEnemies.Remove(matchedEnemy);
+        }
     }
 
     private IEnemy InstantiateRandomEnemy()
@@ -91,5 +99,12 @@ public class EnemiesManager : MonoBehaviour
     private void OnVisibleEnemyAdded(IEnemy enemy)
     {
         enemy.Speed = this.enemySpeed;
+    }
+
+    private void OnVisibleEnemyRemoved(IEnemy enemy)
+    {
+        // Move it back to the top of the screen, and set its speed to 0
+        this.PositionEnemyRandomlyAboveScreen(enemy);
+        enemy.Speed = 0;
     }
 }

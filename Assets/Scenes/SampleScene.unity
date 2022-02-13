@@ -242,7 +242,7 @@ MonoBehaviour:
   enemiesPoolSize: 100
   emptyEnemy: {fileID: 2342986664188443649, guid: fc054e48e8074344293ff873e870118f, type: 3}
   rate: 0.99
-  initialInterval: 1500
+  initialInterval: 1000
   enemySpeed: 2
 --- !u!4 &813967301
 Transform:
