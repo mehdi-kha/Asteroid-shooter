@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Modules.Enemies;
 using Modules.Inputs;
 using Modules.UI;
@@ -16,6 +17,12 @@ public class EnemiesManager : MonoBehaviour
     [SerializeField] private int enemiesPoolSize = 100;
 
     [SerializeField] private GameObject emptyEnemy;
+
+    [SerializeField] private float rate = 0.99f;
+
+    [SerializeField] private int initialInterval = 1500;
+
+    [SerializeField] private float enemySpeed = 2;
     
     System.Random random = new System.Random();
 
@@ -25,6 +32,7 @@ public class EnemiesManager : MonoBehaviour
     void Start()
     {
         this.inputManager.Shoot.Subscribe(OnShoot);
+        this.enemiesModel.VisibleEnemies.ObserveAdd().Subscribe(e => this.OnVisibleEnemyAdded(e.Value));
 
         this.topLeftPosition = this.uiModel.TopLeftWorldPosition();
         this.topRightPosition = this.uiModel.TopRightWorldPosition();
@@ -35,6 +43,9 @@ public class EnemiesManager : MonoBehaviour
             var enemy = this.InstantiateRandomEnemy();
             this.enemiesModel.AvailableEnemies.Add(enemy);
         }
+        
+        // Start spawning
+        this.SpawnEnemiesPeriodically(initialInterval, this.rate);
     }
 
     private void OnShoot(int number)
@@ -60,5 +71,25 @@ public class EnemiesManager : MonoBehaviour
         var horizontalDistance = topRightPosition.x - topLeftPosition.x;
         var horizontalPosition = ((float)random.NextDouble() * horizontalDistance) - (horizontalDistance / 2);
         enemy.SetPosition(new Vector2(horizontalPosition, topLeftPosition.y + enemy.Sprite.bounds.extents.y));
+    }
+
+    private async void SpawnEnemiesPeriodically(int millisecondsBeforeNextSpawn, float rate)
+    {
+        await Task.Delay(millisecondsBeforeNextSpawn);
+        this.SpawnEnemy();
+        
+        // Spawn the next one
+        this.SpawnEnemiesPeriodically((int)(rate * millisecondsBeforeNextSpawn), rate);
+    }
+
+    private void SpawnEnemy()
+    {
+        this.enemiesModel.VisibleEnemies.Add(this.enemiesModel.AvailableEnemies[0]);
+        this.enemiesModel.AvailableEnemies.RemoveAt(0);
+    }
+
+    private void OnVisibleEnemyAdded(IEnemy enemy)
+    {
+        enemy.Speed = this.enemySpeed;
     }
 }

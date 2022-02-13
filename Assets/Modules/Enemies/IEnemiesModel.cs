@@ -6,6 +6,6 @@ namespace Modules.Enemies
     public interface IEnemiesModel
     {
         IReactiveCollection<IEnemy> VisibleEnemies { get; }
-        ICollection<IEnemy> AvailableEnemies { get; }
+        IList<IEnemy> AvailableEnemies { get; }
     }
 }

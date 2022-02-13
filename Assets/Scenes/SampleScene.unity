@@ -241,6 +241,9 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 06ebc3b6f7d199745ac6895e9d0f2e09, type: 3}
   enemiesPoolSize: 100
   emptyEnemy: {fileID: 2342986664188443649, guid: fc054e48e8074344293ff873e870118f, type: 3}
+  rate: 0.99
+  initialInterval: 1500
+  enemySpeed: 2
 --- !u!4 &813967301
 Transform:
   m_ObjectHideFlags: 0

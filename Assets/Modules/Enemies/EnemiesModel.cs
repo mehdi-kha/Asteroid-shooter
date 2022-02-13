@@ -8,7 +8,7 @@ namespace Modules.Enemies
         // TODO: Find some reactive queue instead of a collection
         public IReactiveCollection<IEnemy> VisibleEnemies { get; }
         
-        public ICollection<IEnemy> AvailableEnemies { get; }
+        public IList<IEnemy> AvailableEnemies { get; }
 
         public EnemiesModel()
         {
