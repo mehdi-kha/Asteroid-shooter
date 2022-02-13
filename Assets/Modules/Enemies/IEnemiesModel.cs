@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UniRx;
+using UnityEngine.Pool;
 
 namespace Modules.Enemies
 {
@@ -7,6 +8,6 @@ namespace Modules.Enemies
     {
         // TODO maybe a hashtable can be more efficient
         IReactiveCollection<IEnemy> VisibleEnemies { get; }
-        IList<IEnemy> AvailableEnemies { get; }
+        IObjectPool<IEnemy> AvailableEnemies { get; set; }
     }
 }

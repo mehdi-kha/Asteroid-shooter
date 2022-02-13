@@ -1,4 +1,6 @@
+using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Modules.Enemies;
 using Modules.Inputs;
@@ -6,6 +8,7 @@ using Modules.UI;
 using UnityEngine;
 using Zenject;
 using UniRx;
+using UniRx.Toolkit;
 
 public class EnemiesManager : MonoBehaviour
 {
@@ -15,8 +18,6 @@ public class EnemiesManager : MonoBehaviour
     
     [SerializeField] private Sprite[] enemiesBackgrounds;
 
-    [SerializeField] private int enemiesPoolSize = 100;
-
     [SerializeField] private GameObject emptyEnemy;
 
     [SerializeField] private float rate = 0.99f;
@@ -25,10 +26,17 @@ public class EnemiesManager : MonoBehaviour
 
     [SerializeField] private float enemySpeed = 2;
     
+    [SerializeField]
+    private bool collectionChecks = true;
+    [SerializeField]
+    public int defaultPoolSize = 100;
+    
     System.Random random = new System.Random();
 
     private Vector2 topLeftPosition;
     private Vector2 topRightPosition;
+
+    private CancellationTokenSource tokenSource;
 
     void Start()
     {
@@ -40,14 +48,15 @@ public class EnemiesManager : MonoBehaviour
         this.topRightPosition = this.uiModel.TopRightWorldPosition();
         
         // Fill in the pool
-        for (int i = 0; i < this.enemiesPoolSize; i++)
+        if (this.enemiesModel.AvailableEnemies == null)
         {
-            var enemy = this.InstantiateRandomEnemy();
-            this.enemiesModel.AvailableEnemies.Add(enemy);
+            this.enemiesModel.AvailableEnemies = new UnityEngine.Pool.ObjectPool<IEnemy>(CreatePooledItem, OnTakeFromPool, OnReturnedToPool, OnDestroyPoolObject, collectionChecks, defaultPoolSize);
         }
-        
+
         // Start spawning
-        this.SpawnEnemiesPeriodically(initialInterval, this.rate);
+        tokenSource = new System.Threading.CancellationTokenSource();
+        tokenSource.Token.ThrowIfCancellationRequested();
+        this.SpawnEnemiesPeriodically(initialInterval, this.rate, tokenSource);
     }
 
     private void OnShoot(int number)
@@ -56,7 +65,7 @@ public class EnemiesManager : MonoBehaviour
         var matchedEnemy = this.enemiesModel.VisibleEnemies.FirstOrDefault(enemy => enemy.Number == number);
         if (matchedEnemy != null)
         {
-            this.enemiesModel.AvailableEnemies.Add(matchedEnemy);
+            this.enemiesModel.AvailableEnemies.Release(matchedEnemy);
             this.enemiesModel.VisibleEnemies.Remove(matchedEnemy);
         }
     }
@@ -81,19 +90,33 @@ public class EnemiesManager : MonoBehaviour
         enemy.SetPosition(new Vector2(horizontalPosition, topLeftPosition.y + enemy.Sprite.bounds.extents.y));
     }
 
-    private async void SpawnEnemiesPeriodically(int millisecondsBeforeNextSpawn, float rate)
+    private async void SpawnEnemiesPeriodically(int millisecondsBeforeNextSpawn, float rate, CancellationTokenSource tokenSource)
     {
-        await Task.Delay(millisecondsBeforeNextSpawn);
+        if (tokenSource.IsCancellationRequested)
+            return;
+
+        try
+        {
+            await Task.Delay(millisecondsBeforeNextSpawn, tokenSource.Token);
+        }
+        catch (TaskCanceledException)
+        {
+        }
+        catch (Exception e)
+        {
+            Debug.LogError(e);
+        }
+
         this.SpawnEnemy();
-        
+
         // Spawn the next one
-        this.SpawnEnemiesPeriodically((int)(rate * millisecondsBeforeNextSpawn), rate);
+        this.SpawnEnemiesPeriodically((int)(rate * millisecondsBeforeNextSpawn), rate, tokenSource);
     }
 
     private void SpawnEnemy()
     {
-        this.enemiesModel.VisibleEnemies.Add(this.enemiesModel.AvailableEnemies[0]);
-        this.enemiesModel.AvailableEnemies.RemoveAt(0);
+        var enemy = this.enemiesModel.AvailableEnemies.Get();
+        this.enemiesModel.VisibleEnemies.Add(enemy);
     }
 
     private void OnVisibleEnemyAdded(IEnemy enemy)
@@ -106,5 +129,32 @@ public class EnemiesManager : MonoBehaviour
         // Move it back to the top of the screen, and set its speed to 0
         this.PositionEnemyRandomlyAboveScreen(enemy);
         enemy.Speed = 0;
+    }
+    
+    IEnemy CreatePooledItem()
+    { 
+        return this.InstantiateRandomEnemy();
+    }
+
+    // Called when an item is returned to the pool using Release
+    void OnReturnedToPool(IEnemy enemy)
+    {
+    }
+
+    // Called when an item is taken from the pool using Get
+    void OnTakeFromPool(IEnemy enemy)
+    {
+    }
+
+    // If the pool capacity is reached then any items returned will be destroyed.
+    // We can control what the destroy behavior does, here we destroy the GameObject.
+    void OnDestroyPoolObject(IEnemy enemy)
+    {
+        enemy.Destroy();
+    }
+
+    private void OnApplicationQuit()
+    {
+        this.tokenSource.Cancel();
     }
 }

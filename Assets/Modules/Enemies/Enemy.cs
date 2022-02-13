@@ -47,5 +47,10 @@ namespace Modules.Enemies
         {
             this.transform.position = wordPosition;
         }
+
+        public void Destroy()
+        {
+            Destroy(this.gameObject);
+        }
     }
 }

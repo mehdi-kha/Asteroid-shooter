@@ -14,5 +14,10 @@ namespace Modules.Enemies
         /// </summary>
         /// <param name="wordPosition">The new world position.</param>
         public void SetPosition(Vector2 wordPosition);
+
+        /// <summary>
+        ///     Destroy this enemy's instance.
+        /// </summary>
+        public void Destroy();
     }
 }
