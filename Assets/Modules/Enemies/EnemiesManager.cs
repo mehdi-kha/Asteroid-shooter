@@ -37,8 +37,8 @@ public class EnemiesManager : MonoBehaviour
     {
         var enemySprite = enemiesBackgrounds[random.Next(enemiesBackgrounds.Length)];
         var enemyValue = random.Next(10);
-        Instantiate(emptyEnemy);
-        var enemy = emptyEnemy.GetComponent<IEnemy>();
+        var enemyGameObject = Instantiate(emptyEnemy);
+        var enemy = enemyGameObject.GetComponent<IEnemy>();
         enemy.Sprite = enemySprite;
         enemy.Number = enemyValue;
         return enemy;

@@ -1,22 +1,33 @@
-﻿using UnityEngine;
+﻿using Modules.Enemies.NumbersSprites;
+using UnityEngine;
 
 namespace Modules.Enemies
 {
     public class Enemy : MonoBehaviour, IEnemy
     {
-        [SerializeField]
-        private SpriteRenderer spriteRenderer;
+        [SerializeField] private SpriteRenderer background;
+
+        [SerializeField] private SpriteRenderer numberSprite;
+
+        [SerializeField] private NumbersSpritesScriptableObject numbersSprites;
+
+        private int number;
 
         public Sprite Sprite
         {
-            get => this.spriteRenderer.sprite;
-            set
-            {
-                this.spriteRenderer.sprite = value;
-            }
+            get => this.background.sprite;
+            set { this.background.sprite = value; }
         }
 
-        public int Number { get; set; }
+        public int Number
+        {
+            get => this.number;
+            set
+            {
+                this.number = value;
+                this.numberSprite.sprite = numbersSprites.NumbersSprites[value];
+            }
+        }
 
         private float speed = 2;
 
