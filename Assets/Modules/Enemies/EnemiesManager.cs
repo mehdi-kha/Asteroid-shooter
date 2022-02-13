@@ -46,6 +46,7 @@ public class EnemiesManager : MonoBehaviour
         this.inputManager.Shoot.Subscribe(OnShoot);
         this.enemiesModel.VisibleEnemies.ObserveAdd().Subscribe(e => this.OnVisibleEnemyAdded(e.Value));
         this.enemiesModel.VisibleEnemies.ObserveRemove().Subscribe(e => this.OnVisibleEnemyRemoved(e.Value));
+        this.gameModel.GameStatus.Subscribe(OnGameStatusChanged);
 
         this.topLeftPosition = this.uiModel.TopLeftWorldPosition;
         this.topRightPosition = this.uiModel.TopRightWorldPosition;
@@ -61,6 +62,19 @@ public class EnemiesManager : MonoBehaviour
         tokenSource = new System.Threading.CancellationTokenSource();
         tokenSource.Token.ThrowIfCancellationRequested();
         this.SpawnEnemiesPeriodically(initialInterval, this.rate, tokenSource);
+    }
+
+    private void OnGameStatusChanged(GameStatus status)
+    {
+        this.tokenSource?.Cancel();
+        if (status == GameStatus.GameOver)
+        {
+            foreach (var enemy in this.enemiesModel.VisibleEnemies)
+            {
+                // Stop all enemies still falling
+                enemy.Speed = 0;
+            }
+        }
     }
 
     private void OnShoot(int number)
