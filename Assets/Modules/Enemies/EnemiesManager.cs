@@ -52,8 +52,6 @@ public class EnemiesManager : MonoBehaviour
         this.topLeftPosition = this.uiModel.TopLeftWorldPosition;
         this.topRightPosition = this.uiModel.TopRightWorldPosition;
         this.bottomLeftPosition = this.uiModel.BottomLeftWorldPosition;
-        
-        this.InitializeEnemies();
     }
 
     private void InitializeEnemies()
@@ -95,7 +93,7 @@ public class EnemiesManager : MonoBehaviour
             }
         }
 
-        if (status.Previous == GameStatus.GameOver && status.Current == GameStatus.Playing)
+        if (status.Previous != GameStatus.Paused && status.Current == GameStatus.Playing)
         {
             this.InitializeEnemies();
         }
