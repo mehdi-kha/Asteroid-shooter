@@ -1,50 +1,52 @@
-using Modules.UI;
 using UnityEngine;
 
-public class UIModel : MonoBehaviour, IUIModel
+namespace Modules.UI
 {
-    [SerializeField] private Camera camera;
-
-    private Vector2? topLeftWorldPosition;
-    private Vector2? topRightWorldPosition;
-    private Vector2? bottomLeftWorldPosition;
-
-    public Vector2 TopLeftWorldPosition
+    public class UIModel : MonoBehaviour, IUIModel
     {
-        get
-        {
-            if (topLeftWorldPosition == null)
-            {
-                this.topLeftWorldPosition = camera.ScreenToWorldPoint(new Vector2(0, camera.pixelHeight));
-            }
+        [SerializeField] private Camera camera;
 
-            return this.topLeftWorldPosition.Value;
+        private Vector2? topLeftWorldPosition;
+        private Vector2? topRightWorldPosition;
+        private Vector2? bottomLeftWorldPosition;
+
+        public Vector2 TopLeftWorldPosition
+        {
+            get
+            {
+                if (topLeftWorldPosition == null)
+                {
+                    this.topLeftWorldPosition = camera.ScreenToWorldPoint(new Vector2(0, camera.pixelHeight));
+                }
+
+                return this.topLeftWorldPosition.Value;
+            }
         }
-    }
 
-    public Vector2 TopRightWorldPosition
-    {
-        get
+        public Vector2 TopRightWorldPosition
         {
-            if (topRightWorldPosition == null)
+            get
             {
-                this.topRightWorldPosition = camera.ScreenToWorldPoint(new Vector2(camera.pixelWidth, camera.pixelHeight));
-            }
+                if (topRightWorldPosition == null)
+                {
+                    this.topRightWorldPosition = camera.ScreenToWorldPoint(new Vector2(camera.pixelWidth, camera.pixelHeight));
+                }
 
-            return this.topRightWorldPosition.Value;
+                return this.topRightWorldPosition.Value;
+            }
         }
-    }
 
-    public Vector2 BottomLeftWorldPosition
-    {
-        get
+        public Vector2 BottomLeftWorldPosition
         {
-            if (bottomLeftWorldPosition == null)
+            get
             {
-                this.bottomLeftWorldPosition = camera.ScreenToWorldPoint(new Vector2(0, 0));
-            }
+                if (bottomLeftWorldPosition == null)
+                {
+                    this.bottomLeftWorldPosition = camera.ScreenToWorldPoint(new Vector2(0, 0));
+                }
 
-            return this.bottomLeftWorldPosition.Value;
+                return this.bottomLeftWorldPosition.Value;
+            }
         }
     }
 }

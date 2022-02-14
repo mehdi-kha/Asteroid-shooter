@@ -1,11 +1,12 @@
-using Modules.Game;
-using UnityEngine;
 using Zenject;
 
-public class GameInstaller : MonoInstaller
+namespace Modules.Game
 {
-    public override void InstallBindings()
+    public class GameInstaller : MonoInstaller
     {
-        this.Container.BindInterfacesAndSelfTo<GameModel>().AsSingle();
+        public override void InstallBindings()
+        {
+            this.Container.BindInterfacesAndSelfTo<GameModel>().AsSingle();
+        }
     }
 }

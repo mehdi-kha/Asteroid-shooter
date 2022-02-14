@@ -1,10 +1,12 @@
-using Modules.Enemies;
 using Zenject;
 
-public class EnemiesInstaller : MonoInstaller
+namespace Modules.Enemies
 {
-    public override void InstallBindings()
+    public class EnemiesInstaller : MonoInstaller
     {
-        this.Container.BindInterfacesAndSelfTo<EnemiesModel>().AsSingle();
+        public override void InstallBindings()
+        {
+            this.Container.BindInterfacesAndSelfTo<EnemiesModel>().AsSingle();
+        }
     }
 }

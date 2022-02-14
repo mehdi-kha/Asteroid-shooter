@@ -1,8 +1,6 @@
-﻿using System;
-using Modules.Game;
+﻿using Modules.Game;
 using Modules.Inputs;
 using UniRx;
-using UniRx.Triggers;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Zenject;

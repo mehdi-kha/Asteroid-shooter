@@ -1,14 +1,26 @@
-﻿using System.Windows.Input;
-using UniRx;
+﻿using UniRx;
 using UnityEngine;
 
 namespace Modules.Enemies
 {
+    /// <summary>
+    ///     Represents an enemy
+    /// </summary>
     public interface IEnemy
     {
+        /// <summary>
+        ///     The background sprite of the enemy.
+        /// </summary>
         Sprite Sprite { get; set; }
+        
+        /// <summary>
+        ///     The value associated to this enemy.
+        /// </summary>
         int Number { get; set; }
         
+        /// <summary>
+        ///     The current speed of the enemy.
+        /// </summary>
         float Speed { get; set; }
         
         /// <summary>
@@ -16,6 +28,9 @@ namespace Modules.Enemies
         /// </summary>
         float BottomWorldPosition { get; set; }
 
+        /// <summary>
+        ///     Command triggered when the enemy wins.
+        /// </summary>
         public IReactiveCommand<IEnemy> BottomReached { get; }
 
         /// <summary>

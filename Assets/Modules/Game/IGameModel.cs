@@ -7,6 +7,9 @@ namespace Modules.Game
     /// </summary>
     public interface IGameModel
     {
+        /// <summary>
+        ///     Current status of the game.
+        /// </summary>
         IReactiveProperty<GameStatus> GameStatus { get; }
         
         /// <summary>

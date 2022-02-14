@@ -1,12 +1,14 @@
-using Modules.UI;
 using UnityEngine;
 using Zenject;
 
-public class UIInstaller : MonoInstaller
+namespace Modules.UI
 {
-    [SerializeField] private UIModel uiModel;
-    public override void InstallBindings()
+    public class UIInstaller : MonoInstaller
     {
-        this.Container.BindInterfacesAndSelfTo<UIModel>().FromInstance(uiModel);
+        [SerializeField] private UIModel uiModel;
+        public override void InstallBindings()
+        {
+            this.Container.BindInterfacesAndSelfTo<UIModel>().FromInstance(uiModel);
+        }
     }
 }

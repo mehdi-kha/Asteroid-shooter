@@ -1,7 +1,4 @@
-﻿using System;
-using System.Windows.Input;
-using Modules.Enemies.NumbersSprites;
-using Modules.UI;
+﻿using Modules.Enemies.NumbersSprites;
 using UniRx;
 using UnityEngine;
 
