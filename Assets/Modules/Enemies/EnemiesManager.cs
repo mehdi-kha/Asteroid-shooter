@@ -10,8 +10,10 @@ using Modules.UI;
 using UnityEngine;
 using Zenject;
 using UniRx;
-using UniRx.Toolkit;
 
+/// <summary>
+///     Handles enemies spawning and shooting.
+/// </summary>
 public class EnemiesManager : MonoBehaviour
 {
     [Inject] private IInputManager inputManager;
@@ -41,6 +43,8 @@ public class EnemiesManager : MonoBehaviour
     private Vector2 bottomLeftPosition;
 
     private CancellationTokenSource tokenSource;
+
+    private int currentInterval;
 
     void Start()
     {
@@ -76,26 +80,43 @@ public class EnemiesManager : MonoBehaviour
             }
             this.enemiesModel.VisibleEnemies.Clear();
         }
-        tokenSource = new System.Threading.CancellationTokenSource();
-        tokenSource.Token.ThrowIfCancellationRequested();
+        this.tokenSource = new System.Threading.CancellationTokenSource();
+        this.tokenSource.Token.ThrowIfCancellationRequested();
         this.SpawnEnemiesPeriodically(initialInterval, this.rate, tokenSource);
     }
 
     private void OnGameStatusChanged(Pair<GameStatus> status)
     {
-        this.tokenSource?.Cancel();
-        if (status.Current == GameStatus.GameOver)
+        switch (status.Current)
         {
-            foreach (var enemy in this.enemiesModel.VisibleEnemies)
-            {
-                // Stop all enemies still falling
-                enemy.Speed = 0;
-            }
-        }
+            case GameStatus.GameOver:
+            case GameStatus.Paused:
+                // Stop spawning periodically
+                this.tokenSource.Cancel();
+                foreach (var enemy in this.enemiesModel.VisibleEnemies)
+                {
+                    // Stop all enemies still falling
+                    enemy.Speed = 0;
+                }
 
-        if (status.Previous != GameStatus.Paused && status.Current == GameStatus.Playing)
-        {
-            this.InitializeEnemies();
+                break;
+            case GameStatus.Playing:
+                if (status.Previous != GameStatus.Paused)
+                {
+                    this.InitializeEnemies();
+                    return;
+                }
+                foreach (var enemy in this.enemiesModel.VisibleEnemies)
+                {
+                    // Unpause
+                    enemy.Speed = enemySpeed;
+                }
+                // Spawn periodically again, based on the last known spawning rate
+                this.tokenSource = new CancellationTokenSource();
+                tokenSource.Token.ThrowIfCancellationRequested();
+                this.SpawnEnemiesPeriodically(this.currentInterval, this.rate, this.tokenSource);
+
+                break;
         }
     }
 
@@ -103,12 +124,13 @@ public class EnemiesManager : MonoBehaviour
     {
         // Find the first enemy in the queue matching the number
         var matchedEnemy = this.enemiesModel.VisibleEnemies.FirstOrDefault(enemy => enemy.Number == number);
-        if (matchedEnemy != null)
+        if (matchedEnemy == null)
         {
-            this.enemiesModel.AvailableEnemies.Release(matchedEnemy);
-            this.enemiesModel.VisibleEnemies.Remove(matchedEnemy);
-            this.gameModel.Score.Value += 1;
+            return;
         }
+        this.enemiesModel.AvailableEnemies.Release(matchedEnemy);
+        this.enemiesModel.VisibleEnemies.Remove(matchedEnemy);
+        this.gameModel.Score.Value += 1;
     }
 
     private IEnemy InstantiateRandomEnemy()
@@ -134,6 +156,7 @@ public class EnemiesManager : MonoBehaviour
 
     private async void SpawnEnemiesPeriodically(int millisecondsBeforeNextSpawn, float rate, CancellationTokenSource tokenSource)
     {
+        this.currentInterval = millisecondsBeforeNextSpawn;
         if (tokenSource.IsCancellationRequested)
             return;
 
@@ -170,6 +193,7 @@ public class EnemiesManager : MonoBehaviour
 
     private void OnEnemyReachBottom(IEnemy enemy)
     {
+        this.tokenSource?.Cancel();
         this.gameModel.GameStatus.Value = GameStatus.GameOver;
     }
 
@@ -205,6 +229,6 @@ public class EnemiesManager : MonoBehaviour
 
     private void OnApplicationQuit()
     {
-        this.tokenSource.Cancel();
+        this.tokenSource?.Cancel();
     }
 }

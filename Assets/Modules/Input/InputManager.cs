@@ -12,6 +12,11 @@ namespace Modules.Inputs
         {
             this.Shoot.Execute(key);
         }
+
+        public void OnPause()
+        {
+            this.Pause?.Invoke();
+        }
         
         [Inject]
         public void Initialize()
@@ -28,9 +33,12 @@ namespace Modules.Inputs
             this.playerInputActions.Player.Shoot9.performed += _=>OnShoot(9);
 
             this.Shoot = new ReactiveCommand<int>();
+
+            this.playerInputActions.Player.Pause.performed += _ => OnPause();
         }
 
         public IReactiveCommand<int> Shoot { get; private set; }
+        public event IInputManager.PauseEventHandler Pause;
     }
 }
 
