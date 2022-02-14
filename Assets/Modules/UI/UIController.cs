@@ -14,6 +14,7 @@ namespace Modules.UI
         [SerializeField] private UIDocument uiDocument;
 
         private Button restartButton;
+        private Label scoreLabel;
 
         private void Start()
         {
@@ -22,10 +23,13 @@ namespace Modules.UI
                 if (gameStatus == GameStatus.GameOver)
                 {
                     this.uiDocument.rootVisualElement.visible = true;
+                    var score = this.gameModel.Score.Value;
+                    this.scoreLabel.text = score == 1 ? $"{score} point" : $"{score} points";
                 }
             });
 
             this.uiDocument.rootVisualElement.visible = false;
+            this.scoreLabel = this.uiDocument.rootVisualElement.Q<Label>("score-label");
             this.restartButton = this.uiDocument.rootVisualElement.Q<Button>("restart-button");
             this.restartButton.clicked += OnRestart;
         }

@@ -58,6 +58,9 @@ public class EnemiesManager : MonoBehaviour
 
     private void InitializeEnemies()
     {
+        // Reinitialize the current score
+        this.gameModel.Score.Value = 0;
+        
         // Fill in the pool
         if (this.enemiesModel.AvailableEnemies != null)
         {
@@ -106,6 +109,7 @@ public class EnemiesManager : MonoBehaviour
         {
             this.enemiesModel.AvailableEnemies.Release(matchedEnemy);
             this.enemiesModel.VisibleEnemies.Remove(matchedEnemy);
+            this.gameModel.Score.Value += 1;
         }
     }
 
