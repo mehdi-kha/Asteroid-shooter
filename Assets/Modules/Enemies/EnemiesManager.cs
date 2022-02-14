@@ -18,10 +18,10 @@ namespace Modules.Enemies
     /// </summary>
     public class EnemiesManager : MonoBehaviour
     {
-        [Inject] private IInputManager inputManager;
-        [Inject] private IEnemiesModel enemiesModel;
-        [Inject] private IUIModel uiModel;
-        [Inject] private IGameModel gameModel;
+        private IInputManager inputManager;
+        private IEnemiesModel enemiesModel;
+        private IUIModel uiModel;
+        private IGameModel gameModel;
 
         [SerializeField] private GameObject emptyEnemy;
 
@@ -46,8 +46,15 @@ namespace Modules.Enemies
 
         private int currentInterval;
 
-        void Start()
+        [Inject]
+        public void Initialize(IInputManager inputManager, IEnemiesModel enemiesModel, IUIModel uiModel,
+            IGameModel gameModel)
         {
+            this.inputManager = inputManager;
+            this.enemiesModel = enemiesModel;
+            this.uiModel = uiModel;
+            this.gameModel = gameModel;
+            
             this.inputManager.Shoot.Subscribe(OnShoot);
             this.enemiesModel.VisibleEnemies.ObserveAdd().Subscribe(e => this.OnVisibleEnemyAdded(e.Value));
             this.enemiesModel.VisibleEnemies.ObserveRemove().Subscribe(e => this.OnVisibleEnemyRemoved(e.Value));
