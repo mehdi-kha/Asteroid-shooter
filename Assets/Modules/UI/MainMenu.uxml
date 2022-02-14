@@ -1,0 +1,10 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Modules/UI/style.uss?fileID=7433441132597879392&amp;guid=440149de27833c445af4ea34b515512e&amp;type=3#style" />
+    <ui:VisualElement style="flex-grow: 1; align-items: center; justify-content: center;">
+        <ui:VisualElement style="height: 289px; width: 284px; background-color: rgba(0, 143, 140, 0.48); border-top-left-radius: 10px; border-bottom-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; align-items: center; justify-content: flex-start;">
+            <ui:Label text="Asteroid shooter" display-tooltip-when-elided="true" name="game-title-label" style="font-size: 24px; -unity-text-align: middle-center; color: rgb(255, 255, 255); position: absolute; top: 34px; -unity-font-style: bold; left: auto;" />
+            <ui:Label text="How to play: Asteroids are falling from the sky! Press the corresponding key before they crash on Earth." display-tooltip-when-elided="true" name="game-instructions-label" style="position: absolute; top: 100px; flex-grow: 0; flex-wrap: wrap; white-space: normal; width: 230px; color: rgba(255, 255, 255, 255); left: auto;" />
+            <ui:Button text="Start" display-tooltip-when-elided="true" name="start-button" enable-rich-text="true" class="button-style" style="top: 216px; left: auto;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
