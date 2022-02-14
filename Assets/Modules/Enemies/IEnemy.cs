@@ -1,4 +1,5 @@
-﻿using UniRx;
+﻿using Modules.Enemies.EnemyType;
+using UniRx;
 using UnityEngine;
 
 namespace Modules.Enemies
@@ -17,16 +18,16 @@ namespace Modules.Enemies
         ///     The value associated to this enemy.
         /// </summary>
         int Number { get; set; }
-        
-        /// <summary>
-        ///     The current speed of the enemy.
-        /// </summary>
-        float Speed { get; set; }
-        
+
         /// <summary>
         ///     The vertical world coordinate below which the enemy has won.
         /// </summary>
         float BottomWorldPosition { get; set; }
+        
+        /// <summary>
+        ///     The species of this enemy.
+        /// </summary>
+        EnemyTypeScriptableObject EnemyType { get; set; }
 
         /// <summary>
         ///     Command triggered when the enemy wins.
@@ -43,5 +44,15 @@ namespace Modules.Enemies
         ///     Destroy this enemy's instance.
         /// </summary>
         public void Destroy();
+
+        /// <summary>
+        ///     Let the enemy move.
+        /// </summary>
+        public void Move();
+
+        /// <summary>
+        ///     Stop the enemy.
+        /// </summary>
+        public void Stop();
     }
 }

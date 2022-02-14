@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Modules.Enemies.EnemyType;
 using Modules.Game;
 using Modules.Helper;
 using Modules.Inputs;
@@ -21,8 +22,6 @@ namespace Modules.Enemies
         [Inject] private IEnemiesModel enemiesModel;
         [Inject] private IUIModel uiModel;
         [Inject] private IGameModel gameModel;
-        
-        [SerializeField] private Sprite[] enemiesBackgrounds;
 
         [SerializeField] private GameObject emptyEnemy;
 
@@ -30,8 +29,8 @@ namespace Modules.Enemies
 
         [SerializeField] private int initialInterval = 1000;
 
-        [SerializeField] private float enemySpeed = 2;
-        
+        [SerializeField] private EnemyTypeScriptableObject[] enemyTypes;
+
         [SerializeField]
         private bool collectionChecks = true;
         [SerializeField]
@@ -97,7 +96,7 @@ namespace Modules.Enemies
                     foreach (var enemy in this.enemiesModel.VisibleEnemies)
                     {
                         // Stop all enemies still falling
-                        enemy.Speed = 0;
+                        enemy.Stop();
                     }
 
                     break;
@@ -110,7 +109,7 @@ namespace Modules.Enemies
                     foreach (var enemy in this.enemiesModel.VisibleEnemies)
                     {
                         // Unpause
-                        enemy.Speed = enemySpeed;
+                        enemy.Move();
                     }
                     // Spawn periodically again, based on the last known spawning rate
                     this.tokenSource = new CancellationTokenSource();
@@ -136,14 +135,15 @@ namespace Modules.Enemies
 
         private IEnemy InstantiateRandomEnemy()
         {
-            var enemySprite = enemiesBackgrounds[random.Next(enemiesBackgrounds.Length)];
+            var enemyType = this.enemyTypes[random.Next(enemyTypes.Length)];
+            var enemySprite = enemyType.Sprites[random.Next(enemyType.Sprites.Length)];
             var enemyValue = random.Next(10);
             var enemyGameObject = Instantiate(emptyEnemy);
             var enemy = enemyGameObject.GetComponent<IEnemy>();
             enemy.Sprite = enemySprite;
             enemy.Number = enemyValue;
-            enemy.Speed = 0;
             enemy.BottomWorldPosition = this.bottomLeftPosition.y;
+            enemy.EnemyType = enemyType;
             this.PositionEnemyRandomlyAboveScreen(enemy);
             return enemy;
         }
@@ -187,7 +187,7 @@ namespace Modules.Enemies
 
         private void OnVisibleEnemyAdded(IEnemy enemy)
         {
-            enemy.Speed = this.enemySpeed;
+            enemy.Move();
             // Connect the enemy's victory with the overall game status
             enemy.BottomReached.Subscribe(OnEnemyReachBottom);
         }
@@ -202,7 +202,7 @@ namespace Modules.Enemies
         {
             // Move it back to the top of the screen, and set its speed to 0
             this.PositionEnemyRandomlyAboveScreen(enemy);
-            enemy.Speed = 0;
+            enemy.Stop();
         }
         
         IEnemy CreatePooledItem()

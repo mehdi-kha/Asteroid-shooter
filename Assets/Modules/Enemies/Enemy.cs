@@ -1,4 +1,5 @@
-﻿using Modules.Enemies.NumbersSprites;
+﻿using Modules.Enemies.EnemyType;
+using Modules.Enemies.NumbersSprites;
 using UniRx;
 using UnityEngine;
 
@@ -17,8 +18,6 @@ namespace Modules.Enemies
 
         private int number;
 
-        private System.Random random = new System.Random();
-
         public Sprite Sprite
         {
             get => this.background.sprite;
@@ -35,13 +34,14 @@ namespace Modules.Enemies
             }
         }
 
-        public float Speed { get; set; }
+        private float speed = 0;
         
         public float BottomWorldPosition { get; set; }
+        public EnemyTypeScriptableObject EnemyType { get; set; }
 
         void Update()
         {
-            transform.Translate(Vector3.down * Speed * Time.deltaTime);
+            transform.Translate(Vector3.down * speed * Time.deltaTime);
 
             if (this.transform.position.y < this.BottomWorldPosition)
             {
@@ -60,7 +60,17 @@ namespace Modules.Enemies
         {
             Destroy(this.gameObject);
         }
-        
+
+        public void Move()
+        {
+            this.speed = this.EnemyType.Speed;
+        }
+
+        public void Stop()
+        {
+            this.speed = 0;
+        }
+
         public void Awake()
         {
             this.BottomReached = new ReactiveCommand<IEnemy>();
