@@ -15,6 +15,9 @@ The project is separated into different modules, installed by the Zenject instal
 - The Input module converts the user input into relevant game events. New input actions or control schemes (for example, for other platforms) can be defined in `PlayerInputActions`.
 - The game module holds the game status (for example, if the game is paused), and the current score.
 - The UI module handles the visibility of the menus, and the interaction the user has with them.
+
+![Project's architecture](https://github.com/mehdi-kha/Asteroid-shooter/blob/master/architecture.jpg?raw=true)
+
 ## 3rd party plugins and assets
 - [UniRx](https://github.com/neuecc/UniRx) is a library that makes it easier to implement observables in Unity.
 - [Zenject](https://github.com/modesttree/Zenject) is a plugin that makes dependency injection easier.
