@@ -1,9 +1,13 @@
 # Asteroid shooter
-Asteroid shooter is a small 2D game made with Unity. Asteroids fall from the sky, and you have to press the corresponding number on your keyboard in order to destroy them. If one of them reaches the bottom of the screen, the game is over.
+Asteroid shooter was made within 2-3 days as a one-person game jam. The goal was to have a very simple 2D game that is playable but still clean enough code wise despite the small amount of time.
+This 2D game was made with Unity. Asteroids fall from the sky, and you have to press the corresponding number on your keyboard in order to destroy them. If one of them reaches the bottom of the screen, the game is over.
 
 1 enemy killed = 1 point added to the score.
 
 You can find the latest Windows release here: https://developer.cloud.unity3d.com/share/share.html?shareId=ZkK_FmK11d
+
+https://user-images.githubusercontent.com/17810529/201470024-6057da7f-47ba-49be-b25e-04df83b3cb15.mp4
+
 # Developer information
 ## Unity version
 Unity 2021 (2021.2.11f1) is used, so that we can leverage 2 of its features:
