@@ -7,7 +7,7 @@ orbs:
 workflows:
   build-unity-project:
     jobs:
-      - deploy:
+      - run:
           executor:
             name: node/default
           steps:
