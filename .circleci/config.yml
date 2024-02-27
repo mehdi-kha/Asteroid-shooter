@@ -10,11 +10,11 @@ workflows:
       - deploy:
           executor:
             name: node/default
-              steps:
-                - add_ssh_keys:
-                    fingerprints:
-                      - "SO:ME:FIN:G:ER:PR:IN:T"
-                      - "SHA256:4jIO71cNaIekPILl3bIK8df2ux5YWa/ls8TNQo+AsjE"
+          steps:
+            - add_ssh_keys:
+                fingerprints:
+                  - "SO:ME:FIN:G:ER:PR:IN:T"
+                  - "SHA256:4jIO71cNaIekPILl3bIK8df2ux5YWa/ls8TNQo+AsjE"
       - unity/create-activation-file
       - unity/build:
           name: 'build-windows64-il2cpp'
