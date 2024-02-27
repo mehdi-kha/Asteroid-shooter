@@ -14,7 +14,6 @@ workflows:
             name: 'unity/windows-2022'
             target_platform: 'windows-il2cpp'
             editor_version: '2021.3.2f1'
-          project-path: 'Unity2D-Demo-Game-CI-CD/src'
           build-target: StandaloneWindows64
           compress: true
           context: unity
