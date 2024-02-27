@@ -1,0 +1,19 @@
+version: 2.1
+
+orbs:
+  unity: game-ci/unity@x.y
+
+workflows:
+  build-unity-project:
+    jobs:
+      - unity/create-activation-file
+      - unity/build:
+          name: 'build-linux64-il2cpp'
+          step-name: 'Build StandaloneWindows64'
+          executor:
+            name: 'unity/windows-2022'
+            editor_version: '2021.3.2f1'
+          project-path: 'Unity2D-Demo-Game-CI-CD/src'
+          build-target: StandaloneWindows64
+          compress: true
+          context: unity
