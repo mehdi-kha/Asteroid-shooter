@@ -8,7 +8,7 @@ workflows:
     jobs:
       - unity/create-activation-file
       - unity/build:
-          name: 'build-linux64-il2cpp'
+          name: 'build-windows64-il2cpp'
           step-name: 'Build StandaloneWindows64'
           executor:
             name: 'unity/windows-2022'
