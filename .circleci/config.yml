@@ -13,12 +13,6 @@ jobs:
           fingerprints:
             - "SO:ME:FIN:G:ER:PR:IN:T"
             - "SHA256:4jIO71cNaIekPILl3bIK8df2ux5YWa/ls8TNQo+AsjE"
-
-workflows:
-  build-unity-project:
-    jobs:
-      - build
-      - unity/create-activation-file
       - unity/build:
           name: 'build-windows64-il2cpp'
           step-name: 'Build StandaloneWindows64'
@@ -29,3 +23,9 @@ workflows:
           build-target: StandaloneWindows64
           compress: true
           context: unity
+
+workflows:
+  build-unity-project:
+    jobs:
+      - unity/create-activation-file
+      - build
