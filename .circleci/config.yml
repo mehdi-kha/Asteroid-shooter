@@ -19,6 +19,6 @@ workflows:
           context: unity
           steps:
             - add_ssh_keys:
-            fingerprints:
-              - "SO:ME:FIN:G:ER:PR:IN:T"
-              - "SHA256:4jIO71cNaIekPILl3bIK8df2ux5YWa/ls8TNQo+AsjE"
+              fingerprints:
+                - "SO:ME:FIN:G:ER:PR:IN:T"
+                - "SHA256:4jIO71cNaIekPILl3bIK8df2ux5YWa/ls8TNQo+AsjE"
